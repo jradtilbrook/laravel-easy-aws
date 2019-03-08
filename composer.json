@@ -10,5 +10,36 @@
             "email": "jrad.tilbrook@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "aws/aws-sdk-php": "~3.0",
+        "aws/aws-sdk-php-laravel": "~3.0",
+        "illuminate/cache": "~5.6.0 || ~5.7.0",
+        "illuminate/contracts": "~5.6.0 || ~5.7.0",
+        "illuminate/support": "~5.6.0 || ~5.7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "EasyAws\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EasyAws\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpcs": "@php vendor/bin/phpcs",
+        "phpunit": "phpdbg -qrr vendor/bin/phpunit --colors=always"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EasyAws\\ServiceProvider"
+            ]
+        }
+    }
 }
