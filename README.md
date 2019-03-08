@@ -31,7 +31,13 @@ Credentials are resolved automatically using the default provider chain from the
 they will be cached. This really only helps if that credentials chain ended up resolving credentials from the EC2
 Metadata API, otherwise it would have been using hardcoded credentials of some kind and caching them doesn't help much.
 
-You can configure which cache store to use ... TODO
+You can configure which cache store to use by setting the environment variable `EASYAWS_CACHE_STORE` to any built in
+Laravel cache drivers.
+
+## Note
+
+Caching credentials can be insecure. Be careful if you are going to use an external cache driver like Redis or database
+as the credentials are stored in plaintext.
 
 ## License
 
