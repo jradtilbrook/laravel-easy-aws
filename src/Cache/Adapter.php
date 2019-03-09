@@ -38,7 +38,12 @@ class Adapter implements CacheInterface
     public function set($key, $value, $ttl = 0)
     {
         // NOTE: laravel uses minutes (pre 5.8) so this conversion is required
-        $this->cache->put($this->makeKey($key), $value, ceil($ttl / 60));
+        $version = (float)app()->version();
+        if ($version <= 5.8) {
+            $ttl = ceil($ttl / 60);
+        }
+
+        $this->cache->put($this->makeKey($key), $value, $ttl);
     }
 
     /**
