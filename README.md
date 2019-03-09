@@ -39,6 +39,12 @@ Laravel cache drivers.
 Caching credentials can be insecure. Be careful if you are going to use an external cache driver like Redis or database
 as the credentials are stored in plaintext.
 
+## SQS Client
+
+The queue configuration for AWS SQS has also been modified to use these cached credentials. This means you don't need to
+add a key or secret for that client - if using SQS as your queue driver. Also **please note** that  the `prefix`
+configuration key is not used because it is redundant, you'll need to prepend the value of `prefix` to `queue`.
+
 ## License
 
 Laravel Easy AWS is licensed under the MIT license.

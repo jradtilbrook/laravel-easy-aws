@@ -7,7 +7,9 @@ use Aws\S3\S3Client;
 use Aws\Sns\SnsClient;
 use Aws\Sqs\SqsClient;
 use EasyAws\Cache\Adapter;
+use EasyAws\Queue\SqsConnector;
 use Illuminate\Cache\CacheManager;
+use Illuminate\Queue\QueueManager;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -17,17 +19,21 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot(CacheManager $manager)
+    public function boot(CacheManager $cacheManager, QueueManager $queueManager)
     {
         $this->publishes([__DIR__ . '/../config/easyaws.php' => config_path('easyaws.php')]);
 
         $credentialsCache = [
-            'credentials' => new Adapter($manager, config('easyaws.cache_store')),
+            'credentials' => new Adapter($cacheManager, config('easyaws.cache_store')),
             'client' => config('easyaws.http_client'), // NOTE: used for unit testing only
         ];
         $credentials = CredentialProvider::defaultProvider($credentialsCache);
 
         config(['aws.credentials' => $credentials]);
+
+        $queueManager->extend('sqs', function () {
+            return new SqsConnector();
+        });
     }
 
     /**
@@ -41,7 +47,10 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->app->singleton(S3Client::class, $this->getAwsClientClosure('s3'));
         $this->app->singleton(SnsClient::class, $this->getAwsClientClosure('sns'));
-        $this->app->singleton(SqsClient::class, $this->getAwsClientClosure('sqs'));
+        $this->app->singleton(
+            SqsClient::class,
+            $this->getAwsClientClosure('sqs', ['http' => ['timeout' => 60, 'connect_timeout' => 60]])
+        );
     }
 
     /**
@@ -50,10 +59,10 @@ class ServiceProvider extends BaseServiceProvider
      * @param string $client The AWS client to retrieve
      * @return callable|\Closure For binding a concrete class using this factory.
      */
-    protected function getAwsClientClosure(string $client)
+    protected function getAwsClientClosure(string $client, array $config = [])
     {
-        return function ($app) use ($client) {
-            return $app->make('aws')->createClient($client);
+        return function ($app) use ($client, $config) {
+            return $app->make('aws')->createClient($client, $config);
         };
     }
 }
