@@ -2,8 +2,12 @@
 
 namespace EasyAws;
 
-use Aws\Credentials\CredentialsProvider;
+use Aws\Credentials\CredentialProvider;
+use Aws\S3\S3Client;
+use Aws\Sns\SnsClient;
+use Aws\Sqs\SqsClient;
 use EasyAws\Cache\Adapter;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -17,8 +21,11 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->publishes([__DIR__ . '/../config/easyaws.php' => config_path('easyaws.php')]);
 
-        $credentialsCache = ['credentials' => new Adapter($manager, config('easyaws.cache_store'))];
-        $credentials = CredentialsProvider::defaultProvider($credentialsCache);
+        $credentialsCache = [
+            'credentials' => new Adapter($manager, config('easyaws.cache_store')),
+            'client' => config('easyaws.http_client'), // NOTE: used for unit testing only
+        ];
+        $credentials = CredentialProvider::defaultProvider($credentialsCache);
 
         config(['aws.credentials' => $credentials]);
     }

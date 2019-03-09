@@ -3,6 +3,7 @@
 namespace EasyAws\Cache;
 
 use Aws\CacheInterface;
+use Illuminate\Cache\CacheManager;
 
 class Adapter implements CacheInterface
 {
@@ -44,6 +45,7 @@ class Adapter implements CacheInterface
      * Remove a cache key.
      *
      * @param string $key Key to remove.
+     * @codeCoverageIgnore AWS doesn't seem to ever call this but its required by the interface
      */
     public function remove($key)
     {
@@ -52,6 +54,6 @@ class Adapter implements CacheInterface
 
     protected function makeKey(string $key)
     {
-        return "easyaws_credentials_$key";
+        return "easy$key";
     }
 }
