@@ -14,6 +14,12 @@ It also binds certain AWS client objects to the Laravel container so you can typ
 instead of using the `AWS` facade. Clients are added as needed and we welcome PRs so if you need one that is missing,
 please contribute.
 
+## Installation
+
+```
+composer require healthengine/laravel-easy-aws
+```
+
 ## Usage
 
 There's not much to it. You can now typehint the `S3Client` directly and it will be resolved instead of having to use
