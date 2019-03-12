@@ -19,17 +19,9 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot(CacheManager $cacheManager, QueueManager $queueManager)
+    public function boot(QueueManager $queueManager)
     {
         $this->publishes([__DIR__ . '/../config/easyaws.php' => config_path('easyaws.php')]);
-
-        $credentialsCache = [
-            'credentials' => new Adapter($cacheManager, config('easyaws.cache_store')),
-            'client' => config('easyaws.http_client'), // NOTE: used for unit testing only
-        ];
-        $credentials = CredentialProvider::defaultProvider($credentialsCache);
-
-        config(['aws.credentials' => $credentials]);
 
         $queueManager->extend('sqs', function () {
             return new SqsConnector();
@@ -45,6 +37,13 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/easyaws.php', 'easyaws');
 
+        $this->app->singleton('easyaws.credentials', function ($app) {
+            $credentialsCache = [
+                'credentials' => new Adapter($app->make(CacheManager::class), config('easyaws.cache_store')),
+                'client' => config('easyaws.http_client'), // NOTE: used for unit testing only
+            ];
+            return CredentialProvider::defaultProvider($credentialsCache);
+        });
         $this->app->singleton(S3Client::class, $this->getAwsClientClosure('s3'));
         $this->app->singleton(SnsClient::class, $this->getAwsClientClosure('sns'));
         $this->app->singleton(
@@ -62,6 +61,7 @@ class ServiceProvider extends BaseServiceProvider
     protected function getAwsClientClosure(string $client, array $config = [])
     {
         return function ($app) use ($client, $config) {
+            $config = array_merge(['credentials' => $app->make('easyaws.credentials')], $config);
             return $app->make('aws')->createClient($client, $config);
         };
     }

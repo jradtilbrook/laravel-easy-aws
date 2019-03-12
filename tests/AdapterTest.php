@@ -15,10 +15,10 @@ class AdapterTest extends TestCase
 {
     public function testCredentialResolution()
     {
-        config('aws.credentials')()->wait();
+        app('easyaws.credentials')()->wait();
         $cache = $this->app->make(CacheManager::class)->store('array');
 
-        $this->assertInstanceOf(Credentials::class, config('aws.credentials')()->wait());
+        $this->assertInstanceOf(Credentials::class, app('easyaws.credentials')()->wait());
         $this->assertTrue($cache->has('easyaws_cached_instance_credentials'));
     }
 
