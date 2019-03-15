@@ -2,6 +2,7 @@
 
 namespace EasyAws\Tests;
 
+use Aws\Lambda\LambdaClient;
 use Aws\Laravel\AwsServiceProvider;
 use Aws\S3\S3Client;
 use Aws\Sns\SnsClient;
@@ -11,6 +12,11 @@ use Orchestra\Testbench\TestCase;
 
 class ServiceProviderTest extends TestCase
 {
+    public function testMakeLambdaClient()
+    {
+        $this->assertInstanceOf(LambdaClient::class, $this->app->make(LambdaClient::class));
+    }
+
     public function testMakeS3Client()
     {
         $this->assertInstanceOf(S3Client::class, $this->app->make(S3Client::class));

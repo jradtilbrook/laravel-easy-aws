@@ -3,6 +3,7 @@
 namespace EasyAws;
 
 use Aws\Credentials\CredentialProvider;
+use Aws\Lambda\LambdaClient;
 use Aws\S3\S3Client;
 use Aws\Sns\SnsClient;
 use Aws\Sqs\SqsClient;
@@ -44,6 +45,7 @@ class ServiceProvider extends BaseServiceProvider
             ];
             return CredentialProvider::defaultProvider($credentialsCache);
         });
+        $this->app->singleton(LambdaClient::class, $this->getAwsClientClosure('lambda'));
         $this->app->singleton(S3Client::class, $this->getAwsClientClosure('s3'));
         $this->app->singleton(SnsClient::class, $this->getAwsClientClosure('sns'));
         $this->app->singleton(
