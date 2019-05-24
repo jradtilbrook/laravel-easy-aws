@@ -4,6 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/healthengine/laravel-easy-aws/downloads)](https://packagist.org/packages/healthengine/laravel-easy-aws)
 [![Build Status](https://travis-ci.com/HealthEngineAU/laravel-easy-aws.svg?branch=master)](https://travis-ci.com/HealthEngineAU/laravel-easy-aws)
 [![Coverage Status](https://coveralls.io/repos/github/HealthEngineAU/laravel-easy-aws/badge.svg?branch=master)](https://coveralls.io/github/HealthEngineAU/laravel-easy-aws?branch=master)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=HealthEngineAU/laravel-easy-aws)](https://dependabot.com)
 
 This is an extension to the [Laravel AWS SDK](https://github.com/aws/aws-sdk-php-laravel) that provides cacheable
 dynamic credentials - such as those provided by the EC2 Metadata API. This is necessary if you want to
