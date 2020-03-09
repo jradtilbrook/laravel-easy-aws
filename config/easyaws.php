@@ -18,4 +18,10 @@ return [
 
     'cache_store' => env('EASYAWS_CACHE_STORE', 'file'),
 
+    'credentials' => [
+        'key'    => env('AWS_ACCESS_KEY_ID', ''),
+        'secret' => env('AWS_SECRET_ACCESS_KEY', ''),
+        'session_token' => env('AWS_SESSION_TOKEN'),
+    ],
+
 ];
