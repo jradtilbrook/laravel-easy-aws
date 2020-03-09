@@ -2,7 +2,10 @@
 
 namespace EasyAws\Credentials;
 
+use Aws\Credentials\Credentials;
 use Aws\Credentials\CredentialProvider as BaseProvider;
+use Aws\Exception\CredentialsException;
+use GuzzleHttp\Promise;
 
 class CredentialProvider extends BaseProvider
 {
@@ -24,7 +27,9 @@ class CredentialProvider extends BaseProvider
                 );
             }
 
-            return self::reject('Could not find environment variable credentials in easyaws config');
+            return new Promise\RejectedPromise(
+                new CredentialsException('Could not find environment variable credentials in easyaws config')
+            );
         };
     }
 }
