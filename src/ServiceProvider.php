@@ -2,12 +2,12 @@
 
 namespace EasyAws;
 
-use Aws\Credentials\CredentialProvider;
 use Aws\Lambda\LambdaClient;
 use Aws\S3\S3Client;
 use Aws\Sns\SnsClient;
 use Aws\Sqs\SqsClient;
 use EasyAws\Cache\Adapter;
+use EasyAws\Credentials\CredentialProvider;
 use EasyAws\Queue\SqsConnector;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Queue\QueueManager;
