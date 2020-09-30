@@ -62,8 +62,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function getAwsClientClosure(string $client, array $config = [])
     {
-        return function ($app) use ($client, $config) {
-            $config = array_merge(['credentials' => $app->make('easyaws.credentials')], $config);
+        return function ($app, $runtimeConfig) use ($client, $config) {
+            $config = array_merge(
+                ['credentials' => $app->make('easyaws.credentials')],
+                $config,
+                $runtimeConfig
+            );
             return $app->make('aws')->createClient($client, $config);
         };
     }
