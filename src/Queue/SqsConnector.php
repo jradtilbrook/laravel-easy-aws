@@ -18,6 +18,11 @@ class SqsConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        return new SqsQueue(app(SqsClient::class), $config['queue']);
+        return new SqsQueue(
+            app(SqsClient::class),
+            $config['queue'],
+            $config['prefix'] ?? '',
+            $config['suffix'] ?? ''
+        );
     }
 }
